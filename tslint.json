@@ -1,0 +1,22 @@
+{
+    "extends": [
+      "tslint-config-airbnb",
+      "tslint:recommended"
+    ],
+    "rules": {
+      "quotemark": [
+        true,
+        "single"
+      ],
+      "object-literal-sort-keys": false,
+      "no-console": false,
+      "no-unused-expression": false,
+      "member-access": false,
+      "import-name": [
+        false
+      ],
+      "no-namespace": false,
+      "no-increment-decrement": false,
+      "strict-boolean-expressions": false
+    }
+  }

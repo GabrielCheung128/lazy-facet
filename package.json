@@ -1,0 +1,44 @@
+{
+  "name": "lazy-facet",
+  "version": "1.0.0",
+  "description": "A Javascript facet filtering.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielCheung128/lazy-facet.git"
+  },
+  "keywords": [
+    "Javascript",
+    "facet",
+    "filtering"
+  ],
+  "author": "GabrielCheung128",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GabrielCheung128/lazy-facet/issues"
+  },
+  "homepage": "https://github.com/GabrielCheung128/lazy-facet#readme",
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.44",
+    "@types/sinon": "^4.0.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "sinon": "^4.1.2",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.8.0",
+    "tslint-config-airbnb": "^5.3.1",
+    "tslint-consistent-codestyle": "^1.10.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "tslint-microsoft-contrib": "^5.0.1",
+    "typescript": "^2.6.1",
+    "vrsource-tslint-rules": "^5.8.0"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.85",
+    "lodash": "^4.17.4"
+  }
+}
