@@ -4,7 +4,7 @@
   "description": "A Javascript facet filtering.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "node ./node_modules/.bin/_mocha -r ./node_modules/ts-node/register -t 30000000 --recursive test/*test.ts"
   },
   "repository": {
     "type": "git",
