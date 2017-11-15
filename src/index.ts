@@ -68,20 +68,48 @@ class Facet {
       if (_.isEmpty(values)) {
         this.initGrouping[key] = _.groupBy(data, key);
         this.panel[key] = {};
-        _.mapKeys(this.initGrouping[key], (items: any[], itemKey: string) => {
-          this.panel[key][itemKey] = items.length;
-          return items;
-        });
+        this.count(key);
       } else {
         const emptyMapping = this.createEmptyMapping(values);
         const emptyPanel = emptyMapping.panel;
         const emptyGrouping = emptyMapping.grouping;
         this.initGrouping[key] = emptyGrouping;
         this.panel[key] = emptyPanel;
+        let temp: any;
+        if (/\-/.test(values[0])) {
+            temp = _.groupBy(data, (item) => {
+                let index: string;
+                for (const range of values) {
+                    const [up, down] = range.split('-');
+                    if(up && down) {
+                        if (item[key] >= up && item[key] <= down) {
+                            index = range;
+                        };
+                    } else if (up && !down) {
+                        if (item[key] >= up) {
+                            index = range;
+                        };
+                    }
+                }
+                return index;
+            });
+        } else {
+            temp = _.groupBy(data, key);
+        }
+        Object.assign(this.initGrouping[key], temp);
+        this.count(key);
       }
       return values;
     });
+    console.log(this.initGrouping);
     console.log(this.panel);
+  }
+
+  count(key: string){
+    _.mapKeys(this.initGrouping[key], (items: any[], itemKey: string) => {
+        this.panel[key][itemKey] = items.length;
+        return items;
+      });
   }
 
   groupBy(value: string, key: string, data: any[]) {

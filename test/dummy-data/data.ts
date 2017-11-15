@@ -3,7 +3,7 @@ const data = [
     firstName: 'Eddard',
     lastName: 'Stark',
     gender: 'male',
-    age: 35,
+    age: 45,
     house: 'Stark',
   },
   {
