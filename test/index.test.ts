@@ -9,13 +9,13 @@ const expect = Chai.expect;
 describe('Facet', () => {
   it('test', () => {
     const app = new Facet(config.options);
-    app.push([config.pushFilterByGender]);
-    app.push([config.pushFilterByHouse]);
-    app.push([config.pushFilterByAge]);
-    const result = app.exec();
-    console.log(result.total.length);
-    // console.log(app.selectedItemsMapping);
-    console.log(app.data.length);
-    // console.log(app.selectedItemsMapping);
+    app.init();
+    console.log(app.initSelectedItemsMapping);
+    app.pushConditions([config.pushFilterByGender]);
+    app.exec();
+    app.reset();
+    app.pushConditions([config.pushFilterByHouse]);
+    console.log(app.exec().facet);
+    console.log(app.initSelectedItemsMapping);
   });
 });

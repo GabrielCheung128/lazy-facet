@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 
 class Facet {
   data: any[];
-  facet: {};
   condition: {};
   grouping: any;
   execOnChange: boolean;
@@ -11,12 +10,10 @@ class Facet {
   selectedItemsMapping: any;
   conditionsMapping: any;
   initSelectedItemsMapping: any;
-  matchedItems: any[];
   emptyPanel: any;
 
   constructor(options: any = {}) {
     this.data = options.data;
-    this.facet = {};
     this.grouping = options.grouping;
     this.execOnChange = options.execOnChange;
     this.panel = {};
@@ -24,12 +21,10 @@ class Facet {
     this.selectedItemsMapping = {};
     this.conditionsMapping = {};
     this.initSelectedItemsMapping = {};
-    this.matchedItems = [];
     this.emptyPanel = {};
-    this.init();
   }
 
-  push(data: any[] | any) {
+  pushConditions(data: any[] | any) {
     let conditions: any[];
     if (!_.isArray(data)) {
       conditions = [data];
@@ -47,26 +42,22 @@ class Facet {
         delete this.conditionsMapping[key];
       }
     }
-    return;
+    return this.execOnChange && this.exec();
   }
 
   exec() {
     this.sortSelected();
-    let total: any[] = [];
+    let total: any[] = [...this.data];
     const result = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
-      let items: any[] = [];
+      let items: any[] = [...this.data];
       _.mapKeys(this.selectedItemsMapping, (v: any, k: string) => {
         if (key === k) { return; }
-        if (_.isEmpty(items)) {
-          items.push(...v);
-        } else if (!_.isEmpty(v)) {
+        if (!_.isEmpty(v)) {
           items = _.intersection(items, v);
         }
         return v;
       });
-      if (_.isEmpty(total)) {
-        total.push(...value);
-      } else {
+      if (!_.isEmpty(value)) {
         total = _.intersection(total, value);
       }
       return Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
@@ -78,8 +69,9 @@ class Facet {
   }
 
   sortSelected() {
-    this.selectedItemsMapping = Object.assign({}, this.initSelectedItemsMapping);
-    this.matchedItems = [];
+    this.selectedItemsMapping = _.mapValues(this.initSelectedItemsMapping, (v: any, k: string) => {
+      return [...v];
+    });
     for (const item of this.conditions) {
       const data = this.panel[item.group][item.value];
       this.selectedItemsMapping[item.group].push(...data);
@@ -94,6 +86,10 @@ class Facet {
       this.panel[key] = result.group;
       return values;
     });
+    return {
+      total: this.data,
+      facet: this.panel,
+    };
   }
 
   getGroup(values: any[], data: any[], key: string) {
@@ -136,6 +132,15 @@ class Facet {
   createEmptyMapping(group: any[]): any {
     if (_.isEmpty(group)) { return {}; }
     return _.zipObject(group, Array(group.length).fill([]));
+  }
+
+  reset() {
+    this.conditions = [];
+    this.conditionsMapping = {};
+    return {
+      total: this.data,
+      facet: this.panel,
+    };
   }
 }
 
