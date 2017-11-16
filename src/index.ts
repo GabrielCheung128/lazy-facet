@@ -1,5 +1,11 @@
 import * as _ from 'lodash';
 
+export interface ICondition {
+  group: string;
+  value: string;
+  selected: boolean;
+}
+
 class Facet {
   data: any[];
   condition: {};

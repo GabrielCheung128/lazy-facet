@@ -12,10 +12,7 @@ describe('Facet', () => {
     app.init();
     console.log(app.initSelectedItemsMapping);
     app.pushConditions([config.pushFilterByGender]);
-    app.exec();
-    app.reset();
-    app.pushConditions([config.pushFilterByHouse]);
+    app.pushConditions([config.cancelSeleted]);
     console.log(app.exec().facet);
-    console.log(app.initSelectedItemsMapping);
   });
 });
