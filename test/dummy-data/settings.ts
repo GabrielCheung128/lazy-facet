@@ -1,6 +1,7 @@
+import { ICondition, IConfig } from '../../src/index';
 import data from './data';
 
-const options: any = {
+const options: IConfig = {
   data,
   execOnChange: false,
   grouping: {
@@ -10,28 +11,28 @@ const options: any = {
   },
 };
 
-const pushFilterByHouse = {
+const pushFilterByHouse: ICondition = {
   group: 'house',
   value: 'Stark',
-  selected: 1,
+  selected: true,
 };
 
-const pushFilterByGender = {
+const pushFilterByGender: ICondition = {
   group: 'gender',
   value: 'male',
-  selected: 1,
+  selected: true,
 };
 
-const pushFilterByAge = {
+const pushFilterByAge: ICondition = {
   group: 'age',
   value: '11-20',
-  selected: 1,
+  selected: true,
 };
 
-const cancelSeleted = {
+const cancelSeleted: ICondition = {
   group: 'gender',
   value: 'male',
-  selected: 0,
+  selected: false,
 };
 
 export default {

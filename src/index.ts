@@ -1,36 +1,67 @@
 import * as _ from 'lodash';
 
+export interface ICondition {
+  group: string;
+  value: string;
+  selected: boolean;
+}
+
+export interface IConfig {
+  data: any[];
+  execOnChange?: boolean;
+  grouping: {
+    [key: string]: string[];
+  };
+}
+
 class Facet {
   data: any[];
-  facet: {};
-  condition: {};
   grouping: any;
   execOnChange: boolean;
   panel: any;
-  conditions: any[];
+  conditions: ICondition[];
   selectedItemsMapping: any;
   conditionsMapping: any;
   initSelectedItemsMapping: any;
-  matchedItems: any[];
   emptyPanel: any;
 
   constructor(options: any = {}) {
     this.data = options.data;
-    this.facet = {};
     this.grouping = options.grouping;
-    this.execOnChange = options.execOnChange;
+    this.execOnChange = options.execOnChange || false;
     this.panel = {};
     this.conditions = [];
     this.selectedItemsMapping = {};
     this.conditionsMapping = {};
     this.initSelectedItemsMapping = {};
-    this.matchedItems = [];
     this.emptyPanel = {};
-    this.init();
   }
 
-  push(data: any[] | any) {
-    let conditions: any[];
+  init(data: any[] = this.data, grouping: any = this.grouping) {
+    _.mapKeys(grouping, (values: any[], key: string) => {
+      this.initSelectedItemsMapping[key] = [];
+      const result = this.getGroup(values, data, key);
+      this.emptyPanel[key] = result.empty;
+      this.panel[key] = result.group;
+      return values;
+    });
+    return {
+      result: this.data,
+      facet: this.panel,
+    };
+  }
+
+  reset() {
+    this.conditions = [];
+    this.conditionsMapping = {};
+    return {
+      result: this.data,
+      facet: this.panel,
+    };
+  }
+
+  pushConditions(data: ICondition[] | ICondition) {
+    let conditions: ICondition[];
     if (!_.isArray(data)) {
       conditions = [data];
     } else {
@@ -47,53 +78,40 @@ class Facet {
         delete this.conditionsMapping[key];
       }
     }
-    return;
+    return this.execOnChange && this.exec();
   }
 
   exec() {
     this.sortSelected();
-    let total: any[] = [];
+    let total: any[] = [...this.data];
     const result = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
-      let items: any[] = [];
+      let items: any[] = [...this.data];
       _.mapKeys(this.selectedItemsMapping, (v: any, k: string) => {
         if (key === k) { return; }
-        if (_.isEmpty(items)) {
-          items.push(...v);
-        } else if (!_.isEmpty(v)) {
+        if (!_.isEmpty(v)) {
           items = _.intersection(items, v);
         }
         return v;
       });
-      if (_.isEmpty(total)) {
-        total.push(...value);
-      } else {
+      if (!_.isEmpty(value)) {
         total = _.intersection(total, value);
       }
       return Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
     });
     return {
-      total,
+      result: total,
       facet: result,
     };
   }
 
   sortSelected() {
-    this.selectedItemsMapping = Object.assign({}, this.initSelectedItemsMapping);
-    this.matchedItems = [];
+    this.selectedItemsMapping = _.mapValues(this.initSelectedItemsMapping, (v: any, k: string) => {
+      return [...v];
+    });
     for (const item of this.conditions) {
       const data = this.panel[item.group][item.value];
       this.selectedItemsMapping[item.group].push(...data);
     }
-  }
-
-  init(data: any[] = this.data, grouping: any = this.grouping) {
-    _.mapKeys(grouping, (values: any[], key: string) => {
-      this.initSelectedItemsMapping[key] = [];
-      const result = this.getGroup(values, data, key);
-      this.emptyPanel[key] = result.empty;
-      this.panel[key] = result.group;
-      return values;
-    });
   }
 
   getGroup(values: any[], data: any[], key: string) {
@@ -106,9 +124,9 @@ class Facet {
     } else {
       empty = this.createEmptyMapping(values);
       if (/\-/.test(values[0])) {
-        group = Object.assign(empty, this.groupByRange(data, values, key));
+        group = Object.assign({}, empty, this.groupByRange(data, values, key));
       } else {
-        group = Object.assign(empty, _.groupBy(data, key));
+        group = Object.assign({}, empty, _.groupBy(data, key));
       }
     }
     return { group, empty };
