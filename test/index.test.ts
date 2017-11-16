@@ -12,7 +12,8 @@ describe('Facet', () => {
     app.push([config.pushFilterByGender]);
     app.push([config.pushFilterByHouse]);
     app.push([config.pushFilterByAge]);
-    console.log(app.exec());
+    const result = app.exec();
+    console.log(result.total.length);
     // console.log(app.selectedItemsMapping);
     console.log(app.data.length);
     // console.log(app.selectedItemsMapping);

@@ -12,7 +12,6 @@ class Facet {
   conditionsMapping: any;
   initSelectedItemsMapping: any;
   matchedItems: any[];
-  // facet: any;
   emptyPanel: any;
 
   constructor(options: any = {}) {
@@ -26,7 +25,6 @@ class Facet {
     this.conditionsMapping = {};
     this.initSelectedItemsMapping = {};
     this.matchedItems = [];
-    // this.facet = {};
     this.emptyPanel = {};
     this.init();
   }
@@ -54,6 +52,7 @@ class Facet {
 
   exec() {
     this.sortSelected();
+    let total: any[] = [];
     const result = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
       let items: any[] = [];
       _.mapKeys(this.selectedItemsMapping, (v: any, k: string) => {
@@ -65,9 +64,15 @@ class Facet {
         }
         return v;
       });
+      if (_.isEmpty(total)) {
+        total.push(...value);
+      } else {
+        total = _.intersection(total, value);
+      }
       return Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
     });
     return {
+      total,
       facet: result,
     };
   }

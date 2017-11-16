@@ -12,7 +12,7 @@ const options: any = {
 
 const pushFilterByHouse = {
   group: 'house',
-  value: 'Targaryen',
+  value: 'Stark',
   selected: 1,
 };
 
@@ -24,7 +24,7 @@ const pushFilterByGender = {
 
 const pushFilterByAge = {
   group: 'age',
-  value: '21-30',
+  value: '11-20',
   selected: 1,
 };
 
