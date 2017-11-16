@@ -12,20 +12,26 @@ const options: any = {
 
 const pushFilterByHouse = {
   group: 'house',
-  value: 'Targaryen',
-  selected: true,
+  value: 'Stark',
+  selected: 1,
 };
 
 const pushFilterByGender = {
   group: 'gender',
   value: 'male',
-  selected: true,
+  selected: 1,
+};
+
+const pushFilterByAge = {
+  group: 'age',
+  value: '11-20',
+  selected: 1,
 };
 
 const cancelSeleted = {
   group: 'gender',
   value: 'male',
-  selected: false,
+  selected: 0,
 };
 
 export default {
@@ -33,4 +39,5 @@ export default {
   pushFilterByHouse,
   pushFilterByGender,
   cancelSeleted,
+  pushFilterByAge,
 };
