@@ -60,7 +60,8 @@ class Facet {
     };
   }
 
-  pushConditions(data: ICondition[] | ICondition) {
+  push(data: ICondition[] | ICondition, trigger: boolean = this.execOnChange) {
+    if (_.isEmpty(this.initSelectedItemsMapping)) { throw new Error('You need to run init first'); }
     let conditions: ICondition[];
     if (!_.isArray(data)) {
       conditions = [data];
@@ -78,11 +79,11 @@ class Facet {
         delete this.conditionsMapping[key];
       }
     }
-    return this.execOnChange && this.exec();
+    return trigger && this.exec();
   }
 
   exec() {
-    this.sortSelected();
+    this.selectedItemsMapping = this.getSelectedItems(this.initSelectedItemsMapping, this.conditions, this.panel);
     let total: any[] = [...this.data];
     const result = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
       let items: any[] = [...this.data];
@@ -104,14 +105,18 @@ class Facet {
     };
   }
 
-  sortSelected() {
-    this.selectedItemsMapping = _.mapValues(this.initSelectedItemsMapping, (v: any, k: string) => {
+  getSelectedItems(
+    initSelectedItemsMapping: any = this.initSelectedItemsMapping,
+    conditions: ICondition[] = this.conditions,
+    panel: any = this.panel) {
+    const selectedItemsMapping = _.mapValues(initSelectedItemsMapping, (v: any, k: string) => {
       return [...v];
     });
-    for (const item of this.conditions) {
-      const data = this.panel[item.group][item.value];
-      this.selectedItemsMapping[item.group].push(...data);
+    for (const item of conditions) {
+      const data = panel[item.group][item.value];
+      selectedItemsMapping[item.group].push(...data);
     }
+    return selectedItemsMapping;
   }
 
   getGroup(values: any[], data: any[], key: string) {
@@ -136,13 +141,15 @@ class Facet {
     return _.groupBy(data, (item) => {
       let index: string;
       for (const range of ranges) {
-        const [up, down] = range.split('-');
+        let [up, down] = range.split('-');
+        [up, down] = [parseInt(up, 10), parseInt(down, 10)];
+        const value = parseInt(item[key], 10);
         if (up && down) {
-          if (item[key] >= up && item[key] <= down) {
+          if (value >= up && value <= down) {
             index = range;
           }
         } else if (up && !down) {
-          if (item[key] >= up) {
+          if (value >= up) {
             index = range;
           }
         }
