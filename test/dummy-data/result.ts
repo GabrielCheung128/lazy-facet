@@ -1,180 +1,136 @@
+import * as characters from './data';
+
 const initResult: any = {
   age: {
-    '41': [
-      {
-        firstName: 'Eddard',
-        lastName: 'Stark',
-        gender: 'male',
-        age: 45,
-        house: 'Stark',
-      },
-    ],
+    '41': [characters.eddard],
     '1-10': [],
     '11-20': [
-      {
-        firstName: 'Daenerys',
-        lastName: 'Targaryen',
-        gender: 'female',
-        age: 14,
-        house: 'Targaryen',
-      },
-      {
-        firstName: 'Viserys',
-        lastName: 'Targaryen',
-        gender: 'male',
-        age: 16,
-        house: 'Targaryen',
-      },
-      {
-        firstName: 'Jon',
-        lastName: 'Snow',
-        gender: 'male',
-        age: 14,
-        house: 'Stark',
-      },
-      {
-        firstName: 'Sansa',
-        lastName: 'Stark',
-        gender: 'female',
-        age: 12,
-        house: 'Stark',
-      },
+      characters.daenerys,
+      characters.viserys,
+      characters.jon,
+      characters.sansa,
     ],
     '21-30': [
-      {
-        firstName: 'Jamie',
-        lastName: 'Lannister',
-        gender: 'male',
-        age: 30,
-        house: 'Lannister',
-      },
+      characters.jamie,
     ],
     '31-40': [
-      {
-        firstName: 'Robert',
-        lastName: 'Baratheon',
-        gender: 'male',
-        age: 34,
-        house: 'Baratheon',
-      },
+      characters.robert,
     ],
   },
   gender: {
     female: [
-      {
-        firstName: 'Daenerys',
-        lastName: 'Targaryen',
-        gender: 'female',
-        age: 14,
-        house: 'Targaryen',
-      },
-      {
-        firstName: 'Sansa',
-        lastName: 'Stark',
-        gender: 'female',
-        age: 12,
-        house: 'Stark',
-      },
+      characters.daenerys,
+      characters.sansa,
     ],
     male: [
-      {
-        firstName: 'Eddard',
-        lastName: 'Stark',
-        gender: 'male',
-        age: 45,
-        house: 'Stark',
-      },
-      {
-        firstName: 'Robert',
-        lastName: 'Baratheon',
-        gender: 'male',
-        age: 34,
-        house: 'Baratheon',
-      },
-      {
-        firstName: 'Jamie',
-        lastName: 'Lannister',
-        gender: 'male',
-        age: 30,
-        house: 'Lannister',
-      },
-      {
-        firstName: 'Viserys',
-        lastName: 'Targaryen',
-        gender: 'male',
-        age: 16,
-        house: 'Targaryen',
-      },
-      {
-        firstName: 'Jon',
-        lastName: 'Snow',
-        gender: 'male',
-        age: 14,
-        house: 'Stark',
-      },
+      characters.eddard,
+      characters.robert,
+      characters.jamie,
+      characters.viserys,
+      characters.jon,
     ],
   },
   house: {
     Stark: [
-      {
-        firstName: 'Eddard',
-        lastName: 'Stark',
-        gender: 'male',
-        age: 45,
-        house: 'Stark',
-      },
-      {
-        firstName: 'Jon',
-        lastName: 'Snow',
-        gender: 'male',
-        age: 14,
-        house: 'Stark',
-      },
-      {
-        firstName: 'Sansa',
-        lastName: 'Stark',
-        gender: 'female',
-        age: 12,
-        house: 'Stark',
-      },
+      characters.eddard,
+      characters.jon,
+      characters.sansa,
     ],
     Baratheon: [
-      {
-        firstName: 'Robert',
-        lastName: 'Baratheon',
-        gender: 'male',
-        age: 34,
-        house: 'Baratheon',
-      },
+      characters.robert,
     ],
     Lannister: [
-      {
-        firstName: 'Jamie',
-        lastName: 'Lannister',
-        gender: 'male',
-        age: 30,
-        house: 'Lannister',
-      },
+      characters.jamie,
     ],
     Targaryen: [
-      {
-        firstName: 'Daenerys',
-        lastName: 'Targaryen',
-        gender: 'female',
-        age: 14,
-        house: 'Targaryen',
-      },
-      {
-        firstName: 'Viserys',
-        lastName: 'Targaryen',
-        gender: 'male',
-        age: 16,
-        house: 'Targaryen',
-      },
+      characters.daenerys,
+      characters.viserys,
+    ],
+  },
+};
+
+const emptyPanel: any = {
+  age: {
+    '41': [],
+    '1-10': [],
+    '11-20': [],
+    '21-30': [],
+    '31-40': [],
+  },
+  gender: {
+    female: [],
+    male: [],
+  },
+  house: {
+    Stark: [],
+    Baratheon: [],
+    Lannister: [],
+    Targaryen: [],
+  },
+};
+
+const emptySelectedMapping: any = {
+  age: [],
+  gender: [],
+  house: [],
+};
+
+const selectedItems: any = {
+  age: [
+    characters.daenerys,
+    characters.viserys,
+    characters.jon,
+    characters.sansa,
+  ],
+  gender: [],
+  house: [],
+};
+
+const filterByAge: any = {
+  age: {
+    '41': [characters.eddard],
+    '1-10': [],
+    '11-20': [
+      characters.daenerys,
+      characters.viserys,
+      characters.jon,
+      characters.sansa,
+    ],
+    '21-30': [
+      characters.jamie,
+    ],
+    '31-40': [
+      characters.robert,
+    ],
+  },
+  gender: {
+    female: [
+      characters.daenerys,
+      characters.sansa,
+    ],
+    male: [
+      characters.viserys,
+      characters.jon,
+    ],
+  },
+  house: {
+    Stark: [
+      characters.jon,
+      characters.sansa,
+    ],
+    Baratheon: [],
+    Lannister: [],
+    Targaryen: [
+      characters.daenerys,
+      characters.viserys,
     ],
   },
 };
 
 export default {
   initResult,
+  emptyPanel,
+  emptySelectedMapping,
+  selectedItems,
+  filterByAge,
 };

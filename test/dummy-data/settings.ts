@@ -1,5 +1,5 @@
 import { ICondition, IConfig } from '../../src/index';
-import data from './data';
+import data, * as characters from './data';
 
 const options: IConfig = {
   data,
@@ -29,6 +29,12 @@ const pushFilterByAge: ICondition = {
   selected: true,
 };
 
+const pushFilterByAgeWithoutMatching: ICondition = {
+  group: 'age',
+  value: '1-10',
+  selected: true,
+};
+
 const cancelSeleted: ICondition = {
   group: 'gender',
   value: 'male',
@@ -41,4 +47,5 @@ export default {
   pushFilterByGender,
   cancelSeleted,
   pushFilterByAge,
+  pushFilterByAgeWithoutMatching,
 };
