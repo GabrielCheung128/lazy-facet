@@ -86,17 +86,19 @@ class Facet {
     this.selectedItemsMapping = this.getSelectedItems(this.initSelectedItemsMapping, this.conditions, this.panel);
     let total: any[] = [];
     const result = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
-        let items: any[] = [this.data];
-        _.mapKeys(this.selectedItemsMapping, (v: any[], k: string) => {
-            (k !== key && !_.isEmpty(v)) && items.push(v);
-            return v;
-        });
-        if (_.isEmpty(total)) {
-            total = [...items];
-            !_.isEmpty(this.selectedItemsMapping[key]) && total.push(this.selectedItemsMapping[key]);
-            total = _.intersection(...total);
+      let items: any[] = [this.data];
+      _.mapKeys(this.selectedItemsMapping, (v: any[], k: string) => {
+        (k !== key && !_.isEmpty(v)) && items.push(v);
+        return v;
+      });
+      items = _.intersection(...items);
+      if (_.isEmpty(total)) {
+        if (!_.isEmpty(this.selectedItemsMapping[key])) {
+          total = _.intersection(...items, this.selectedItemsMapping[key]);
+        } else {
+          total = [...items];
         }
-        items = _.intersection(...items);
+      }
       return Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
     });
     return {
