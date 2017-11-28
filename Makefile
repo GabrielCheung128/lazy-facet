@@ -9,7 +9,7 @@ linter:
 	./node_modules/.bin/tslint --project .
 
 publish:
-	cd ./build && npm publish --tag=stable
+	cd ./build && npm publish
 
 unpublish:
 	cd ./build && npm unpublish --force lazy-facet@$(current_version)

@@ -13,14 +13,17 @@ With npm:
 
 ### Settings
 
-Config passing in: {
-  data: [] - require.
-  execOnChange: true/false - execute on each push
-  countOnly: return count only on facet result
-  grouping: {
-    key: [groups] - goupings
-  }
-};
+Config passing in:
+```javascript
+  {
+    data: [] - require.
+    execOnChange: true/false - execute on each push
+    countOnly: return count only on facet result
+    grouping: {
+      key: [groups] - goupings
+    }
+  };
+```
 
 ### Example usage
 
