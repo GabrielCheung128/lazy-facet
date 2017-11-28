@@ -3,7 +3,6 @@
   "version": "1.0.2",
   "description": "A Javascript facet filtering.",
   "main": "index.js",
-  "types": "index.d.ts",
   "scripts": {
     "test": "node ./node_modules/.bin/_mocha -r ./node_modules/ts-node/register -t 30000000 --recursive test/*test.ts",
     "build": "make build"

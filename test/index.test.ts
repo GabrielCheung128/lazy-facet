@@ -36,6 +36,15 @@ describe('Facet', () => {
       expect(facet.initSelectedItemsMapping).to.eqls(result.emptySelectedMapping);
       expect(facet.emptyPanel).to.eqls(result.emptyPanel);
     });
+
+    it('should return number only on facet', () => {
+      facet.countOnly = true;
+      const init: any = facet.init();
+      expect(init.result).to.eqls(config.options.data);
+      expect(init.facet).to.eqls(result.initWithCountOnlyResult);
+      expect(facet.initSelectedItemsMapping).to.eqls(result.emptySelectedMapping);
+      expect(facet.emptyPanel).to.eqls(result.emptyPanel);
+    });
   });
 
   describe('#reset', () => {
@@ -159,6 +168,18 @@ describe('Facet', () => {
       const output = facet.exec();
       expect(output.result).to.eqls(characters.default);
       expect(output.facet).to.eqls(result.initResult);
+    });
+
+    it('should return number only on facet', () => {
+      facet.countOnly = true;
+      facet.init();
+      facet.push(config.pushFilterByAge);
+      const output = facet.exec();
+      expect(output.result).to.eqls([characters.daenerys,
+        characters.viserys,
+        characters.jon,
+        characters.sansa]);
+      expect(output.facet).to.eqls(result.filterByAgeWithCountOnlyResult);
     });
   });
 });

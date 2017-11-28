@@ -11,6 +11,17 @@ With npm:
   npm install -S lazy-facet
 ```
 
+### Settings
+
+Config passing in: {
+  data: [] - require.
+  execOnChange: true/false - execute on each push
+  countOnly: return count only on facet result
+  grouping: {
+    key: [groups] - goupings
+  }
+};
+
 ### Example usage
 
 Execute on every push:

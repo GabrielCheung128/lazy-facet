@@ -12,6 +12,7 @@ export interface IConfig {
   grouping: {
     [key: string]: string[];
   };
+  countOnly?: boolean;
 }
 
 class Facet {
@@ -24,16 +25,20 @@ class Facet {
   conditionsMapping: any;
   initSelectedItemsMapping: any;
   emptyPanel: any;
+  countOnly: boolean;
+  outPutPanel: any;
 
-  constructor(options: any = {}) {
+  constructor(options: IConfig) {
     this.data = options.data;
     this.grouping = options.grouping;
     this.execOnChange = options.execOnChange || false;
     this.panel = {};
+    this.outPutPanel = {};
     this.conditions = [];
     this.selectedItemsMapping = {};
     this.conditionsMapping = {};
     this.initSelectedItemsMapping = {};
+    this.countOnly = options.countOnly || false;
     this.emptyPanel = {};
   }
 
@@ -43,11 +48,18 @@ class Facet {
       const result = this.getGroup(values, data, key);
       this.emptyPanel[key] = result.empty;
       this.panel[key] = result.group;
+      if (this.countOnly) {
+        this.outPutPanel[key] = _.mapValues(result.group, (v: any[], k: string) => {
+          return v.length;
+        });
+      } else {
+        this.outPutPanel[key] = result.group;
+      }
       return values;
     });
     return {
       result: this.data,
-      facet: this.panel,
+      facet: this.outPutPanel,
     };
   }
 
@@ -56,7 +68,7 @@ class Facet {
     this.conditionsMapping = {};
     return {
       result: this.data,
-      facet: this.panel,
+      facet: this.outPutPanel,
     };
   }
 
@@ -76,7 +88,7 @@ class Facet {
       }
       if (this.conditionsMapping[key] && !item.selected) {
         _.remove(this.conditions, this.conditionsMapping[key]);
-        delete this.conditionsMapping[key];
+        this.conditionsMapping[key] = undefined;
       }
     }
     return trigger && this.exec();
@@ -99,7 +111,13 @@ class Facet {
           total = [...items];
         }
       }
-      return Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
+      let data = Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
+      if (this.countOnly) {
+        data = _.mapValues(data, (v: any[], k: string) => {
+          return v.length;
+        });
+      }
+      return data;
     });
     return {
       result: total,
