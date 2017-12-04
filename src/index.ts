@@ -75,11 +75,11 @@ class Facet {
   push(data: ICondition[] | ICondition, trigger: boolean = this.execOnChange) {
     if (_.isEmpty(this.initSelectedItemsMapping)) { throw new Error('You need to run init first'); }
     let conditions: ICondition[];
-    if (!_.isArray(data)) {
-      conditions = [data];
-    } else {
-      conditions = data;
-    }
+    this.setConditions(_.isArray(data) ? data : [data]);
+    return trigger && this.exec();
+  }
+
+  setConditions(conditions: any[]) {
     for (const item of conditions) {
       const key = `${item.group}-${item.value}`;
       if (!this.conditionsMapping[key] && item.selected) {
@@ -91,7 +91,6 @@ class Facet {
         this.conditionsMapping[key] = undefined;
       }
     }
-    return trigger && this.exec();
   }
 
   exec() {
