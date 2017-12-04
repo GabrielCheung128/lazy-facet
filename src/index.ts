@@ -96,33 +96,31 @@ class Facet {
 
   exec() {
     this.selectedItemsMapping = this.getSelectedItems(this.initSelectedItemsMapping, this.conditions, this.panel);
-    let total: any[] = [];
-    const result = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
+    let result: any[] = [];
+    const facet = _.mapValues(this.selectedItemsMapping, (value: any, key: string) => {
       let items: any[] = [this.data];
       _.mapKeys(this.selectedItemsMapping, (v: any[], k: string) => {
         (k !== key && !_.isEmpty(v)) && items.push(v);
         return v;
       });
       items = _.intersection(...items);
-      if (_.isEmpty(total)) {
+      if (_.isEmpty(result)) {
         if (!_.isEmpty(this.selectedItemsMapping[key])) {
-          total = _.intersection(...items, this.selectedItemsMapping[key]);
+          result = _.intersection(...items, this.selectedItemsMapping[key]);
         } else {
-          total = [...items];
+          result = [...items];
         }
       }
       let data = Object.assign({}, this.emptyPanel[key], this.getGroup(this.grouping[key], items, key).group);
-      if (this.countOnly) {
-        data = _.mapValues(data, (v: any[], k: string) => {
-          return v.length;
-        });
-      }
-      return data;
+      return this.countOnly ? this.getCount(data) : data;
     });
-    return {
-      result: total,
-      facet: result,
-    };
+    return { result, facet };
+  }
+
+  getCount(data: any[]) {
+    return _.mapValues(data, (v: any[], k: string) => {
+      return v.length;
+    });
   }
 
   getSelectedItems(
